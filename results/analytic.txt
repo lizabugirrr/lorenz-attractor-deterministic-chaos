@@ -1,0 +1,39 @@
+=== Якобіан ===
+⎡ -σ    σ   0 ⎤
+⎢             ⎥
+⎢r - z  -1  -x⎥
+⎢             ⎥
+⎣  y    x   -β⎦
+div f = -beta - sigma - 1
+
+=== Рівноваги ===
+{x: 0, y: 0, z: 0}
+{x: -sqrt(beta*r - beta), y: -sqrt(beta*(r - 1)), z: r - 1}
+{x: sqrt(beta*r - beta), y: sqrt(beta*(r - 1)), z: r - 1}
+
+=== Початок координат ===
+char poly: -(beta + lambda)*(-lambda**2 - lambda*sigma - lambda + r*sigma - sigma)
+eigenvalues: [-beta, -sigma/2 - sqrt(4*r*sigma + sigma**2 - 2*sigma + 1)/2 - 1/2, -sigma/2 + sqrt(4*r*sigma + sigma**2 - 2*sigma + 1)/2 - 1/2]
+
+=== C± ===
+char poly: 2*beta*r*sigma - 2*beta*sigma + lambda**3 + lambda**2*(beta + sigma + 1) + lambda*(beta*r + beta*sigma)
+a2 = beta + sigma + 1 ; a1 = beta*(r + sigma) ; a0 = 2*beta*sigma*(r - 1)
+Routh–Hurwitz a2*a1 - a0 = beta*(beta*r + beta*sigma - r*sigma + r + sigma**2 + 3*sigma)
+r_H = -sigma*(beta + sigma + 3)/(beta - sigma + 1) = 470/19 ≈ 24.736842
+omega_H^2 = a1(r_H) = -2*beta*sigma*(sigma + 1)/(beta - sigma + 1) ≈ 92.6315789473684 ; omega_H ≈ 9.62453006371576
+discriminant roots (r>1): [1.34561717923296]
+
+=== Глобальна стійкість при r<1: V = x^2/sigma + y^2 + z^2 ===
+dV/dt = -2*(beta*z**2 - r*x*y + x**2 - x*y + y**2)
+dV/dt - target = 0 (0 => тотожність доведена)
+
+=== Поглинаюча множина: V = r x^2 + sigma y^2 + sigma (z-2r)^2 ===
+dV/dt = -2*sigma*(-2*beta*r*z + beta*z**2 + r*x**2 + y**2)
+dV/dt - target = 0
+
+=== Пекора–Керролл: синхронізація (y,z)-підсистеми ===
+d/dt (e_y^2+e_z^2)/2 = -beta*e_z**2 - e_y**2
+
+=== Конвекція Релея–Бенара: Ra_c(a) = pi^4 (1+a^2)^3 / a^2 ===
+argmin a = [sqrt(2)/2] ; Ra_c min = 27*pi**4/4 ≈ 657.511364479516
+beta = 4/(1+a^2) at a^2=1/2: 8/3

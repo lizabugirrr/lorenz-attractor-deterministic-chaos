@@ -1,0 +1,24 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.xdv
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# детальні дослідницькі графіки (генеруються experiments/run_all.py)
+figures/*
+!figures/pop_*.png
+!figures/title_bg.png
+results/*.npz
+results/run_log*.txt
