@@ -1,29 +1,29 @@
 % =====================================================================
-%  beamerthemeNight — науково-популярна тема «Нічне небо»
-%  темний фон, великий шрифт, світні акценти траєкторій
+%  beamerthemeNight — тема «Синоптична карта»: папір, ізобари,
+%  холодний (синій) і теплий (червоний) фронти
 % =====================================================================
 \ProvidesPackage{beamerthemeNight}[2026/11/26]
 \RequirePackage{tikz}
 \usetikzlibrary{calc,positioning,arrows.meta,fadings,decorations.pathmorphing,shapes.geometric}
 \RequirePackage[most]{tcolorbox}
 
-\definecolor{NNight}{HTML}{070B1A}
-\definecolor{NTitle}{HTML}{0B132B}
-\definecolor{NDeep}{HTML}{0E1630}
-\definecolor{NCard}{HTML}{18223F}
-\definecolor{NLine}{HTML}{2C3757}
-\definecolor{NInk}{HTML}{E8E6E3}
-\definecolor{NDim}{HTML}{9AA5BD}
-\definecolor{NGold}{HTML}{F4A261}
-\definecolor{NOrange}{HTML}{E76F51}
-\definecolor{NTeal}{HTML}{2A9D8F}
-\definecolor{NSand}{HTML}{E9C46A}
-\definecolor{NSky}{HTML}{6FB3D9}
+\definecolor{NNight}{HTML}{F4EFE2}
+\definecolor{NTitle}{HTML}{F4EFE2}
+\definecolor{NDeep}{HTML}{F4EFE2}
+\definecolor{NCard}{HTML}{E9E1CC}
+\definecolor{NLine}{HTML}{CDC4AC}
+\definecolor{NInk}{HTML}{1F2A37}
+\definecolor{NDim}{HTML}{55524A}
+\definecolor{NGold}{HTML}{8F5B12}
+\definecolor{NOrange}{HTML}{B83227}
+\definecolor{NTeal}{HTML}{2F7A5B}
+\definecolor{NSand}{HTML}{A8740F}
+\definecolor{NSky}{HTML}{1F5C99}
 
 \setbeamercolor{normal text}{fg=NInk,bg=NNight}
 \setbeamercolor{structure}{fg=NGold}
 \setbeamercolor{alerted text}{fg=NOrange}
-\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{frametitle}{fg=NInk}
 \setbeamercolor{itemize item}{fg=NOrange}
 \setbeamercolor{enumerate item}{fg=NOrange}
 \setbeamertemplate{navigation symbols}{}
@@ -31,54 +31,50 @@
 \setbeamertemplate{itemize subitem}{\raisebox{0.2ex}{\tikz\fill[NTeal] (0,0) circle (0.35ex);}}
 \setlength{\leftmargini}{1.3em}
 
-% ---------- фон: нічний градієнт + ледь помітне «сяйво» ----------------
+% ---------- фон: папір із ледь помітними ізобарами -----------------------
 \setbeamertemplate{background canvas}{%
   \begin{tikzpicture}[remember picture,overlay]
-    \shade[top color=NDeep,bottom color=NNight]
-      (current page.south west) rectangle (current page.north east);
-    \fill[NSky,opacity=0.05] ($(current page.north east)+(-1.2,-0.6)$) circle (3.2cm);
-    \fill[NOrange,opacity=0.035] ($(current page.south west)+(1.5,0.8)$) circle (2.6cm);
+    \fill[NNight] (current page.south west) rectangle (current page.north east);
+    \node[opacity=0.25,inner sep=0] at (current page.center)
+      {\includegraphics[width=\paperwidth,height=\paperheight]{pop_isobars.png}};
   \end{tikzpicture}}
 
-% ---------- заголовок: «кікер» (номер розділу) + великий заголовок -----
+% ---------- заголовок із лінією атмосферного фронту ----------------------
+\newcommand{\Nfront}{%
+  \begin{tikzpicture}
+    \draw[NSky,line width=1.1pt] (0,0) -- (1.5,0);
+    \foreach \x in {0.18,0.68,1.18} \fill[NSky] (\x,0) -- ++(0.13,0.14) -- ++(0.13,-0.14) -- cycle;
+    \draw[NOrange,line width=1.1pt] (1.5,0) -- (3,0);
+    \foreach \x in {1.68,2.18,2.68} \fill[NOrange] (\x,0) arc (180:0:0.12) -- cycle;
+  \end{tikzpicture}}
 \setbeamerfont{frametitle}{size=\LARGE,series=\bfseries}
 \setbeamertemplate{frametitle}{%
-  \vspace*{0.35em}%
+  \vspace*{0.6em}%
   \begin{beamercolorbox}[wd=\paperwidth,leftskip=1.25em,rightskip=1.25em]{frametitle}
-    \ifx\insertframesubtitle\@empty\else
-      {\footnotesize\color{NGold}\bfseries\addfontfeature{LetterSpace=12}\MakeUppercase{\insertframesubtitle}}\\[0.15em]%
-    \fi
-    {\usebeamerfont{frametitle}\insertframetitle}\\[-0.6em]
-    \tikz{\fill[NOrange] (0,0) rectangle (1.1,0.055);\fill[NGold] (1.1,0) rectangle (1.6,0.055);\fill[NTeal] (1.6,0) rectangle (1.85,0.055);}
+    {\usebeamerfont{frametitle}\insertframetitle}\\[-0.35em]
+    \Nfront
   \end{beamercolorbox}%
-  \vspace{-0.3em}}
+  \vspace{-0.2em}}
 
 % ---------- низ: тонкий прогрес + номер --------------------------------
-\newlength{\Nprogress}
 \setbeamertemplate{footline}{%
-  \ifnum\inserttotalframenumber>1
-    \setlength{\Nprogress}{\dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber\relax}
-  \else\setlength{\Nprogress}{0pt}\fi
-  \hfill{\scriptsize\color{NDim}\insertframenumber\,/\,\inserttotalframenumber}\hspace*{1.2em}\par\vspace{0.35em}
-  \begin{tikzpicture}
-    \fill[NLine] (0,0) rectangle (\paperwidth,0.04);
-    \shade[left color=NOrange,right color=NGold] (0,0) rectangle (\Nprogress,0.04);
-  \end{tikzpicture}}
+  \hfill\tikz[baseline=(n.base)]\node[draw=NDim,circle,inner sep=1pt,minimum size=1.5em,
+    font=\scriptsize,text=NDim] (n) {\insertframenumber};%
+  \hspace*{1em}\par\vspace{0.6em}}
 
 % ---------- картки ------------------------------------------------------
-\tcbset{Ncard/.style={enhanced,arc=4pt,boxrule=0pt,colback=NCard,coltext=NInk,
-  left=7pt,right=7pt,top=5pt,bottom=5pt,before skip=4pt,after skip=4pt,
+\tcbset{Ncard/.style={enhanced,arc=2pt,boxrule=0pt,colback=NCard,coltext=NInk,
+  left=10pt,right=10pt,top=7pt,bottom=7pt,before skip=4pt,after skip=4pt,
   fonttitle=\bfseries\small,coltitle=#1,title filled=false,colbacktitle=NCard,
-  borderline west={2.5pt}{0pt}{#1},halign=flush left,
+  halign=flush left,
   toptitle=1pt,bottomtitle=-2pt}}
 \newtcolorbox{card}[2][NGold]{Ncard=#1,title={#2}}
 \newtcolorbox{plaincard}[1][NGold]{Ncard=#1}
 
 % формула-«зірка»
-\newtcolorbox{bigeq}[1][NOrange]{enhanced,arc=6pt,boxrule=0.7pt,colframe=#1,colback=NCard,
-  coltext=white,halign=flush center,left=8pt,right=8pt,top=2pt,bottom=2pt,
-  before skip=6pt,after skip=6pt,
-  borderline={0.4pt}{1.5pt}{#1!35!NCard}}
+\newtcolorbox{bigeq}[1][NOrange]{enhanced,arc=2pt,boxrule=0pt,colback=NCard,
+  coltext=NInk,halign=flush center,left=8pt,right=8pt,top=4pt,bottom=4pt,
+  before skip=6pt,after skip=6pt}
 
 % велике число + підпис
 \newcommand{\stat}[3][NGold]{%
@@ -92,6 +88,6 @@
 \newcommand{\tl}[1]{\textcolor{NTeal}{\bfseries #1}}
 \newcommand{\dimtxt}[1]{\textcolor{NDim}{#1}}
 \newcommand{\bigquote}[2]{%
-  {\Large\itshape\color{white}«#1»}\\[0.5em]{\normalsize\color{NGold}— #2}}
+  {\Large\itshape\color{NInk}«#1»}\\[0.5em]{\normalsize\color{NGold}— #2}}
 
 \endinput

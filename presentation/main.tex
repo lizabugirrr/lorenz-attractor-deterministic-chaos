@@ -16,6 +16,7 @@
 
 \graphicspath{{../figures/}}
 \input{../results/numbers.tex}
+\input{../results/numbers_apps.tex}
 
 \newcommand{\Div}{\operatorname{div}}
 \newcommand{\norm}[1]{\lVert #1\rVert}
@@ -33,41 +34,36 @@
 \setbeamertemplate{background canvas}{}
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
-    \fill[NTitle] (current page.south west) rectangle (current page.north east);
-    \node[anchor=east,inner sep=0] at ($(current page.east)+(0.9,-0.1)$)
-      {\includegraphics[height=1.05\paperheight]{title_bg.png}};
-    \fill[NTitle,path fading=east] (current page.south west) rectangle ($(current page.north west)+(0.6\paperwidth,0)$);
-    \node[anchor=north west,text=NGold,font=\footnotesize\bfseries\addfontfeature{LetterSpace=15}]
-      at ($(current page.north west)+(0.9,-1.25)$) {ДИНАМІЧНІ СИСТЕМИ · СЕМЕСТРОВИЙ ПРОЄКТ};
-    \node[anchor=north west,text=white,font=\fontsize{40}{44}\selectfont\bfseries]
-      at ($(current page.north west)+(0.82,-1.75)$) {Ефект метелика};
-    \fill[NOrange] ($(current page.north west)+(0.95,-3.2)$) rectangle ++(1.6,0.07);
-    \node[anchor=north west,text=NInk,text width=0.5\paperwidth,font=\Large,align=left]
-      at ($(current page.north west)+(0.85,-3.45)$)
-      {Дивний атрактор Лоренца\\ і детермінований хаос};
-    \node[anchor=north west,text=NDim,text width=0.5\paperwidth,font=\normalsize\itshape]
-      at ($(current page.north west)+(0.85,-5.0)$)
-      {чому погоду неможливо передбачити на місяць уперед};
-    \node[anchor=south west,text=white,font=\normalsize\bfseries]
-      at ($(current page.south west)+(0.9,0.75)$) {Ім'я Прізвище \textcolor{NDim}{\mdseries\ · 2026}};
+    \fill[NNight] (current page.south west) rectangle (current page.north east);
+    \node[opacity=0.55,inner sep=0] at (current page.center)
+      {\includegraphics[width=\paperwidth,height=\paperheight]{pop_isobars_title.png}};
+    \node[anchor=east,inner sep=0] at ($(current page.east)+(-0.3,-0.2)$)
+      {\includegraphics[height=0.82\paperheight]{pop_attractor.png}};
+    \node[anchor=north west,font=\fontsize{38}{42}\selectfont\bfseries,text=NInk]
+      at ($(current page.north west)+(0.85,-1.7)$) {Ефект метелика};
+    \node[anchor=north west,inner sep=0] at ($(current page.north west)+(0.95,-3.1)$) {\Nfront};
+    \node[anchor=north west,text=NInk,font=\Large,align=left]
+      at ($(current page.north west)+(0.85,-3.55)$) {Дивний атрактор Лоренца\\ та детермінований хаос};
+    \node[anchor=south west,text=NInk,font=\normalsize,align=left]
+      at ($(current page.south west)+(0.85,0.7)$) {\textbf{Ім'я Прізвище}\\ \textcolor{NDim}{Динамічні системи, 2026}};
   \end{tikzpicture}
 \end{frame}}
 
 % =====================================================================
 % 2. ІСТОРІЯ
 % =====================================================================
-\begin{frame}{Одне округлення, яке змінило науку}{1961 · MIT · Едвард Лоренц}
+\begin{frame}{Дослід Лоренца, 1961 рік}
   \centering
-  \includegraphics[height=0.5\textheight]{pop_rounding.png}\par\vspace{0.2em}
-  \begin{columns}[T]
-    \begin{column}{0.4\textwidth}
-      \centering{\fontsize{19}{22}\selectfont\bfseries\color{NGold}0.506127 $\to$ 0.506}\\[0.15em]
-      {\footnotesize\color{NDim}Лоренц ввів у комп'ютер 3 знаки замість 6, щоб зекономити час}
+  \includegraphics[height=0.5\textheight]{pop_rounding.png}\par\vspace{0.4em}
+  \begin{columns}[c]
+    \begin{column}{0.36\textwidth}
+      \centering{\fontsize{16}{19}\selectfont\bfseries\color{NGold}0.506127 $\to$ 0.506}\\[0.2em]
+      {\footnotesize\color{NDim}одне й те саме число, лише коротше}
     \end{column}
-    \begin{column}{0.55\textwidth}
-      \small Через два «місяці» модельного часу погода стала \hl{зовсім іншою}.
-      Не помилка машини — \gl{властивість самих рівнянь}.
-      \\[0.3em]\dimtxt{\footnotesize Графік — власне відтворення експерименту: перезапуск зі стану, округленого до $10^{-3}$.}
+    \begin{column}{0.6\textwidth}
+      \small Щоб не рахувати все спочатку, Лоренц вписав числа з роздруківки і пішов по каву.
+      Повернувся, а в машині вже \gl{зовсім інша погода}. Комп'ютер не зламався: так поводяться самі рівняння.
+      \\[0.2em]\dimtxt{\scriptsize На графіку моє відтворення цього досліду.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -75,16 +71,15 @@
 % =====================================================================
 % 3. МОДЕЛЬ
 % =====================================================================
-\begin{frame}{Три рівняння замість атмосфери}{модель}
+\begin{frame}{Конвекція та рівняння Лоренца}
   \begin{columns}[c]
     \begin{column}{0.47\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{pop_convection.png}\\[0.4em]
-      \small Шар рідини, підігрітий знизу: тепле піднімається, холодне опускається — виникають \gl{конвективні вали}.
-      \\[0.4em]
-      \dimtxt{\footnotesize Рівняння конвекції розкладають у ряд Фур'є і залишають лише \textbf{3 моди} (Зальцман 1962, Лоренц 1963).}
+      \includegraphics[width=\linewidth]{pop_convection.png}\\[0.6em]
+      \small Знизу гаряче, зверху холодно. Тепла рідина піднімається, холодна опускається, і вона починає крутитися \gl{валами}.
     \end{column}
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.48\textwidth}
+      \small Лоренц залишив від цієї картини лише три числа:
       \begin{bigeq}
         \vspace{-0.9em}
         \begin{align*}
@@ -94,14 +89,11 @@
         \end{align*}
         \vspace{-1.3em}
       \end{bigeq}
-      \small
-      \begin{itemize}
-        \item[] \textcolor{NSky}{\bfseries $x$} — швидкість і напрям обертання валів
-        \item[] \textcolor{NSky}{\bfseries $y$} — різниця температур потоків
-        \item[] \textcolor{NSky}{\bfseries $z$} — викривлення профілю температури
-        \item[] \textcolor{NGold}{\bfseries $r$} — сила нагріву ($\sigma=10$, $\beta=\tfrac83$, $r=28$)
-      \end{itemize}
-      \dimtxt{\footnotesize Лише два нелінійні члени: $xz$ та $xy$.}
+      \textcolor{NSky}{\bfseries $x$}\quad як швидко і в який бік крутиться вал\\[0.2em]
+      \textcolor{NSky}{\bfseries $y$}\quad різниця тепла між потоками\\[0.2em]
+      \textcolor{NSky}{\bfseries $z$}\quad як змінюється температура з висотою\\[0.2em]
+      \textcolor{NGold}{\bfseries $r$}\quad як сильно гріємо
+      \\[0.6em]\dimtxt{\footnotesize Класичні значення: $\sigma=10$, $\beta=\tfrac83$, $r=28$.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -109,70 +101,53 @@
 % =====================================================================
 % 4. ДЕТЕРМІНІЗМ VS ПЕРЕДБАЧУВАНІСТЬ
 % =====================================================================
-\begin{frame}[c]{Майбутнє визначене. Але чи відоме?}{детермінізм}
+\begin{frame}[c]{Детермінізм і передбачуваність}
   \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{card}[NSky]{Детермінізм}
-        Праві частини гладкі $\Rightarrow$ для кожного старту існує \textbf{єдиний} розв'язок:
+    \begin{column}{0.47\textwidth}
+      \begin{card}[NSky]{Що нам гарантовано}
+        Один старт веде до \textbf{одного} майбутнього:
         \[ \mathbf{x}(t) = \varphi^t(\mathbf{x}_0). \]
-        Жодної випадковості. Знаючи $\mathbf{x}_0$ \emph{точно}, знаємо все майбутнє — «демон Лапласа».
+        Якби ми знали старт абсолютно точно, знали б усе наперед.
       \end{card}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{card}[NOrange]{Чутлива залежність}
-        Але як завгодно близькі стани колись розходяться на відстань $\varepsilon$:
-        \[ \norm{\mathbf{x}_0-\mathbf{y}_0}<\delta \;\not\Rightarrow\; \norm{\varphi^t\mathbf{x}_0-\varphi^t\mathbf{y}_0}<\varepsilon .\]
-        А точно виміряти $\mathbf{x}_0$ неможливо.
+    \begin{column}{0.47\textwidth}
+      \begin{card}[NOrange]{Що йде не так}
+        Абсолютно точно не виміряти нічого. А два майже однакові старти з часом ведуть у \textbf{зовсім різні} боки.
+        \[ \mathbf{x}_0 \approx \mathbf{y}_0, \quad\text{але}\quad \varphi^t\mathbf{x}_0 \not\approx \varphi^t\mathbf{y}_0 . \]
       \end{card}
     \end{column}
   \end{columns}
-  \vspace{1.5em}
-  \begin{bigeq}[NGold]
-    \large \textbf{Детермінований хаос} \;=\; детермінізм \;+\; обмеженість \;+\; чутливість до початкових умов
-  \end{bigeq}
+  \vspace{1.8em}
+  \centering\large Це і є \gl{детермінований хаос}: правила точні, рух обмежений,\\ а дрібна похибка виростає у велику.
 \end{frame}
 
 % =====================================================================
 % 5. СТИСКАННЯ І РОЗТЯГ
 % =====================================================================
-\begin{frame}{Простір, що стискається і розтягується}{геометрія хаосу}
-  \begin{columns}[c]
-    \begin{column}{0.5\textwidth}
-      \begin{bigeq}
-        $\displaystyle \Div f = \frac{\partial\dot x}{\partial x}+\frac{\partial\dot y}{\partial y}+\frac{\partial\dot z}{\partial z} = -(\sigma+1+\beta)$
-      \end{bigeq}
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \small За теоремою Ліувілля будь-який об'єм станів тане:
-      \[ V(t) = V_0\, e^{-13.67\,t} \]
-      — у мільйон разів за одиницю часу.
-    \end{column}
-  \end{columns}
-  \vspace{0.3em}
+\begin{frame}{Що стається з близькими станами}
   \centering
-  \includegraphics[height=0.36\textheight]{pop_blob.png}\\[0.1em]
-  \small 4000 майже однакових станів: крапля \gl{розтягується} в нитку, \gl{складається}, як тісто, і розмазується по всьому атрактору — хоча її об'єм прямує до \hl{нуля}.
+  \includegraphics[height=0.42\textheight]{pop_blob.png}\\[0.8em]
+  \normalsize Беремо 4000 майже однакових станів. Хмарка \gl{розтягується}, \gl{складається}\\
+  і розходиться по всьому «метелику».
+  \\[0.9em]
+  \small При цьому її об'єм тане, приблизно в мільйон разів за одиницю часу:
+  \[ \Div f = -(\sigma+1+\beta), \qquad V(t) = V_0\, e^{-13.67\,t}. \]
 \end{frame}
 
 % =====================================================================
 % 6. ДИВНИЙ АТРАКТОР
 % =====================================================================
-\begin{frame}{Метелик Лоренца}{дивний атрактор}
+\begin{frame}{Атрактор Лоренца}
   \begin{columns}[c]
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.52\textwidth}
       \centering
-      \includegraphics[height=0.78\textheight]{pop_attractor.png}
+      \includegraphics[height=0.76\textheight]{pop_attractor.png}
     \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{card}[NSky]{Пастка}
-        \small Функція $V = r x^2 + \sigma y^2 + \sigma(z-2r)^2$ спадає:
-        \[ \dot V = -2\sigma\big(r x^2 + y^2 + \beta(z-r)^2 - \beta r^2\big) \]
-        поза еліпсоїдом — жодна траєкторія не втече.
-      \end{card}
-      \begin{card}[NOrange]{Фрактал}
-        \small Об'єм нуль, але це не поверхня: $D = 2 + \dfrac{\lambda_1}{|\lambda_3|} \approx \DKY$ — нескінченно багато «листів», складених у канторову множину.
-      \end{card}
-      \dimtxt{\scriptsize Такер (2002): строге доведення — 14-та проблема Смейла.}
+    \begin{column}{0.44\textwidth}
+      \large Звідки б ми не почали, траєкторія прийде сюди.\\[1em]
+      \small \gl{Втекти вона не може:} далеко від центра рівняння завжди повертають її назад.\\[0.8em]
+      \gl{Це не лінія і не поверхня:} її розмірність приблизно $\DKY$. Безліч тонких «листків», один над одним.\\[1.2em]
+      \dimtxt{\footnotesize Що атрактор справді «дивний», строго довів В.~Такер у 2002 році.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -180,52 +155,40 @@
 % =====================================================================
 % 7. ШЛЯХ ДО ХАОСУ
 % =====================================================================
-\begin{frame}{Підкручуємо нагрів $r$}{шлях до хаосу}
+\begin{frame}{Як змінюється рух зі зростанням $r$}
   \centering
   \begin{tikzpicture}[x=0.43cm]
     \shade[left color=NSky,right color=NOrange] (0,-0.05) rectangle (31,0.05);
     \draw[-{Latex[length=2mm]},NOrange,thick] (30.5,0) -- (31.6,0) node[right,font=\small]{$r$};
-    \foreach \x/\lab/\pos/\col in {1/{1}/above/NSky, 13.93/{13.93}/above/NTeal, 24.06/{24.06}/above/NGold, 24.74/{24.74}/below/NOrange, 28/{28}/above/white}{
+    \foreach \x/\col in {1/NSky, 13.93/NTeal, 24.06/NGold, 24.74/NOrange, 28/NInk}{
       \fill[\col] (\x,0) circle (0.11);
     }
-    \node[above=3pt,font=\footnotesize,text=NSky,align=center] at (1,0) {\textbf{1}\\ вали};
-    \node[above=3pt,font=\footnotesize,text=NTeal,align=center] at (13.93,0) {\textbf{13.93}\\ перші хаотичні орбіти};
-    \node[above=3pt,font=\footnotesize,text=NGold,align=center] at (22.6,0) {\textbf{24.06}\\ народжується атрактор};
-    \node[below=3pt,font=\footnotesize,text=NOrange,align=center] at (24.74,0) {\textbf{24.74}\\ спокій стає нестійким};
-    \node[above=3pt,font=\footnotesize,text=white,align=center] at (29.2,0) {\textbf{28}\\ класика};
-    \node[below=3pt,font=\footnotesize,text=NDim,align=center] at (7,0) {стаціонарна конвекція};
-  \end{tikzpicture}\\[0.2em]
-  \includegraphics[width=\textwidth]{pop_gallery.png}\\[-0.1em]
-  \begin{columns}[c]
-    \begin{column}{0.5\textwidth}
-      \begin{bigeq}
-        \small Раус–Гурвіц: $\displaystyle r_H = \frac{\sigma(\sigma+\beta+3)}{\sigma-\beta-1} = \frac{470}{19}\approx 24.74$
-      \end{bigeq}
-    \end{column}
-    \begin{column}{0.46\textwidth}
-      \footnotesize\dimtxt{Пороги $13.93$ та $24.06$ я знайшов власною бісекцією по нестійкому многовиду рівноваги $O$: $r_{hom}=\rHom$, $r_A\approx\rAlo$.}
-    \end{column}
-  \end{columns}
+    \node[above=3pt,font=\footnotesize,text=NSky,align=center] at (1,0) {\textbf{1}\\ з'являються вали};
+    \node[above=3pt,font=\footnotesize,text=NTeal,align=center] at (13.93,0) {\textbf{13.93}\\ перші нерегулярні орбіти};
+    \node[above=3pt,font=\footnotesize,text=NGold,align=center] at (22.6,0) {\textbf{24.06}\\ народжується метелик};
+    \node[below=3pt,font=\footnotesize,text=NOrange,align=center] at (24.74,0) {\textbf{24.74}\\ рівний рух стає нестійким};
+    \node[above=3pt,font=\footnotesize,text=NInk,align=center] at (29.2,0) {\textbf{28}\\ класика};
+    \node[below=3pt,font=\footnotesize,text=NDim,align=center] at (7,0) {вали крутяться рівно};
+  \end{tikzpicture}\\[0.3em]
+  \includegraphics[width=\textwidth]{pop_gallery.png}\\[0.3em]
+  \footnotesize\dimtxt{Поріг $24.74=\tfrac{470}{19}$ виведено аналітично, а $13.93$ і $24.06$ я отримую чисельно.}
 \end{frame}
 
 % =====================================================================
 % 8. ЕФЕКТ МЕТЕЛИКА
 % =====================================================================
-\begin{frame}{Різниця в $10^{-9}$ — і зовсім інша погода}{ефект метелика}
+\begin{frame}{Чутливість до початкових умов}
   \begin{columns}[c]
     \begin{column}{0.6\textwidth}
       \includegraphics[width=\linewidth]{pop_butterfly.png}
     \end{column}
-    \begin{column}{0.38\textwidth}
+    \begin{column}{0.37\textwidth}
+      \small Два прогнози відрізняються на $10^{-9}$. Спочатку їх не розрізнити, а потім вони живуть кожен своїм життям.
       \begin{bigeq}
         \Large $\delta(t) \approx \delta_0\, e^{\lambda_1 t}$
       \end{bigeq}
       \vspace{0.4em}
-      \stat{$\lambda_1 = \lamOne$}{швидкість розбігання траєкторій}
-      \vspace{0.6em}
-      \stat[NSky]{$\dfrac{\ln 2}{\lambda_1} \approx 0.77$}{похибка подвоюється за цей час}
-      \vspace{0.5em}
-      \small\centering Експонента не залежить від того, наскільки мале $\delta_0$.
+      Різниця \gl{подвоюється} кожні $\approx 0.77$ одиниці часу. Знову і знову.
     \end{column}
   \end{columns}
 \end{frame}
@@ -233,32 +196,28 @@
 % =====================================================================
 % 9. ПОКАЗНИКИ ЛЯПУНОВА
 % =====================================================================
-\begin{frame}{Як виміряти хаос}{показники Ляпунова}
+\begin{frame}{Показники Ляпунова}
   \begin{columns}[c]
     \begin{column}{0.52\textwidth}
       \centering
       \begin{tikzpicture}
         \shade[ball color=NSky!70!NCard] (0,0) circle (0.75);
         \node[below=0.85cm,font=\footnotesize,text=NDim] at (0,0) {кулька станів};
-        \draw[-{Latex[length=2.5mm]},NDim,thick] (1.05,0) -- node[above,font=\small,text=NInk]{$\varphi^t$} (2.15,0);
+        \draw[-{Latex[length=2.5mm]},NDim,thick] (1.05,0) -- node[above,font=\small,text=NInk]{час} (2.15,0);
         \begin{scope}[shift={(4.3,0)},rotate=18]
           \shade[ball color=NOrange!80!NCard] (0,0) ellipse (1.95 and 0.16);
-          \draw[NGold,thick,{Latex[length=2mm]}-{Latex[length=2mm]}] (-1.95,0.45) -- (1.95,0.45)
-            node[pos=0.5,above,sloped,font=\small,text=NGold]{$\propto e^{\lambda_1 t}$};
         \end{scope}
-        \node[font=\small,text=NTeal] at (4.6,-1.0) {товщина $\propto e^{\lambda_3 t}$};
+        \node[font=\footnotesize,text=NDim] at (4.4,-1.15) {витягнута «голка»};
       \end{tikzpicture}
-      \vspace{0.5em}
-      \begin{bigeq}
-        $\displaystyle \lambda_i = \lim_{t\to\infty}\frac1t \ln\frac{\norm{\delta_i(t)}}{\norm{\delta_i(0)}}$,\qquad $\dot{\boldsymbol\delta} = J(\mathbf{x}(t))\,\boldsymbol\delta$
-      \end{bigeq}
-      \footnotesize\dimtxt{Рахую алгоритмом Бенеттіна: інтегрую 12 рівнянь і щокроку ортогоналізую (Грам–Шмідт), $T=10^4$.}
+      \\[1em]
+      \small Дивимося, як швидко кулька витягується в одних напрямках і сплющується в інших. Ці швидкості й називають показниками Ляпунова.
+      \\[0.6em]\footnotesize\dimtxt{Обчислено алгоритмом Бенеттіна, $T=10^4$.}
     \end{column}
-    \begin{column}{0.44\textwidth}
-      \begin{plaincard}[NOrange]\stat[NOrange]{$\lambda_1 = +\lamOne$}{розтяг — джерело хаосу}\end{plaincard}
-      \begin{plaincard}[NSky]\stat[NSky]{$\lambda_2 = \lamTwo$}{уздовж траєкторії — завжди 0}\end{plaincard}
-      \begin{plaincard}[NTeal]\stat[NTeal]{$\lambda_3 = \lamThree$}{сильне стискання}\end{plaincard}
-      \centering\small Перевірка: $\sum\lambda_i = \lamSum = -(\sigma+1+\beta)$\\ \textcolor{NTeal}{\bfseries збігається з теорією до $10^{-4}$}
+    \begin{column}{0.42\textwidth}
+      \begin{plaincard}\stat[NOrange]{$\lambda_1 = +\lamOne$}{розтягує: звідси хаос}\end{plaincard}
+      \begin{plaincard}\stat[NSky]{$\lambda_2 \approx 0$}{уздовж руху нічого не росте}\end{plaincard}
+      \begin{plaincard}\stat[NTeal]{$\lambda_3 = \lamThree$}{сильно стискає}\end{plaincard}
+      \centering\footnotesize Перевірка: їхня сума \lamSum, як і передбачає теорія.
     \end{column}
   \end{columns}
 \end{frame}
@@ -266,22 +225,21 @@
 % =====================================================================
 % 10. МЕЖА ПРОГНОЗУ
 % =====================================================================
-\begin{frame}{Чому не можна просто виміряти точніше?}{межа прогнозу}
+\begin{frame}{Горизонт прогнозу}
   \begin{columns}[c]
-    \begin{column}{0.54\textwidth}
+    \begin{column}{0.55\textwidth}
       \includegraphics[width=\linewidth]{pop_horizon.png}
     \end{column}
-    \begin{column}{0.44\textwidth}
+    \begin{column}{0.42\textwidth}
+      \small Виміряли в 10 разів точніше, а виграли лише
+      \\[0.4em]
+      \stat{$+\predGain$}{одиниці модельного часу}
+      \\[0.6em]
       \begin{bigeq}
-        \Large $\displaystyle T_p \approx \frac{1}{\lambda_1}\ln\frac{\Delta}{\delta_0}$
+        $\displaystyle T_p \approx \frac{1}{\lambda_1}\ln\frac{\Delta}{\delta_0}$
       \end{bigeq}
-      \begin{card}[NOrange]{Логарифмічна пастка}
-        Точність $\times 10$ $\Rightarrow$ горизонт лише $+\dfrac{\ln 10}{\lambda_1}\approx \predGain$.\\[0.2em]
-        \footnotesize Мій розрахунок: нахил $\predSlope\approx 1/\lambda_1$.
-      \end{card}
-      \begin{card}[NSky]{Реальна атмосфера}
-        \footnotesize Похибки дрібних вихорів «заражають» великі масштаби: межа прогнозу погоди — \gl{близько 2 тижнів} (Лоренц, 1969).
-      \end{card}
+      Точність стоїть під логарифмом, тому кожен наступний крок дається дедалі дорожче.\\[0.6em]
+      \dimtxt{\footnotesize Для справжньої атмосфери межу оцінюють приблизно у два тижні.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -289,22 +247,15 @@
 % =====================================================================
 % 11. АНСАМБЛІ
 % =====================================================================
-\begin{frame}{Прогноз — це ймовірність}{як метеорологи живуть із хаосом}
+\begin{frame}{Ансамблевий прогноз}
   \begin{columns}[c]
     \begin{column}{0.6\textwidth}
       \includegraphics[width=\linewidth]{pop_ensemble.png}
     \end{column}
-    \begin{column}{0.38\textwidth}
-      \small Невизначеність — це хмара станів з густиною $\rho$, що тече разом із потоком:
-      \begin{bigeq}
-        \large $\dfrac{\partial\rho}{\partial t} + \nabla\!\cdot(\rho f) = 0$
-      \end{bigeq}
-      \small Розв'язати це рівняння неможливо — тож запускають \gl{ансамбль}: десятки прогнозів зі злегка різних стартів.
-      \begin{itemize}\footnotesize
-        \item ширина «віяла» = чесна оцінка невпевненості;
-        \item відповідь: «70\% — дощ», а не «так/ні»;
-        \item ECMWF: 51 прогноз двічі на добу.
-      \end{itemize}
+    \begin{column}{0.37\textwidth}
+      \small Замість одного прогнозу запускають багато, щоразу з трохи іншого старту. Це \gl{ансамбль}.\\[0.9em]
+      Якщо прогнози тримаються разом, їм можна довіряти. Якщо розбіглися віялом, ми \gl{не знаємо}, і це теж корисно знати.\\[0.9em]
+      \dimtxt{\footnotesize Європейський центр прогнозів (ECMWF) двічі на добу запускає 51 такий варіант.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -312,24 +263,23 @@
 % =====================================================================
 % 12. АСИМІЛЯЦІЯ ДАНИХ
 % =====================================================================
-\begin{frame}{Тримати модель на повідку даних}{асиміляція даних}
+\begin{frame}{Асиміляція даних}
   \centering
-  \includegraphics[height=0.42\textheight]{pop_enkf.png}\\[-0.2em]
+  \includegraphics[height=0.42\textheight]{pop_enkf.png}\\[0.4em]
   \begin{columns}[c]
-    \begin{column}{0.5\textwidth}
-      \begin{bigeq}
-        $\mathbf{x}^{a} = \mathbf{x}^{f} + K\big(\mathbf{y} - H\mathbf{x}^{f}\big)$\\[0.2em]
-        {\small $K = P H^{\mathsf T}\big(H P H^{\mathsf T} + R\big)^{-1}$}
-      \end{bigeq}
-      \footnotesize\dimtxt{Фільтр Калмана: зважуємо прогноз $\mathbf{x}^f$ і вимірювання $\mathbf{y}$ за їхньою надійністю. Ансамблевий варіант — EnKF.}
-    \end{column}
     \begin{column}{0.46\textwidth}
+      \small Як навігатор: є розрахунок, де ми мали б бути, і є неточний сигнал GPS. Довіряємо кожному настільки, наскільки він надійний.
+      \begin{bigeq}
+        $\mathbf{x}^{a} = \mathbf{x}^{f} + K\big(\mathbf{y} - H\mathbf{x}^{f}\big)$
+      \end{bigeq}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \footnotesize\centering Середня похибка в моєму досліді (фільтр EnKF):\\[0.5em]
       \begin{columns}[T]
-        \begin{column}{0.33\linewidth}\stat[NDim]{\enkfFree}{без даних}\end{column}
+        \begin{column}{0.33\linewidth}\stat[NDim]{\enkfFree}{модель сама}\end{column}
         \begin{column}{0.33\linewidth}\stat[NSand]{2.0}{шум вимірів}\end{column}
-        \begin{column}{0.33\linewidth}\stat[NOrange]{\enkfRmse}{модель + дані}\end{column}
+        \begin{column}{0.33\linewidth}\stat[NOrange]{\enkfRmse}{разом}\end{column}
       \end{columns}
-      \vspace{0.3em}\centering\footnotesize Середня похибка: разом точніше, ніж модель і прилади окремо.
     \end{column}
   \end{columns}
 \end{frame}
@@ -337,54 +287,42 @@
 % =====================================================================
 % 13. ВЛАСНІ РЕЗУЛЬТАТИ
 % =====================================================================
-\begin{frame}[c]{Що я порахував сам}{за лаштунками}
-  \vspace{0.2em}
-  \begin{columns}[T]
-    \begin{column}{0.31\textwidth}
-      \begin{plaincard}[NOrange]\stat[NOrange]{\lamOne}{$\lambda_1$ \quad (літ. 0.9056)}\end{plaincard}
-      \begin{plaincard}[NTeal]\stat[NTeal]{\DKY}{розмірність $D_{KY}$ \quad (літ. 2.06)}\end{plaincard}
-    \end{column}
-    \begin{column}{0.31\textwidth}
-      \begin{plaincard}[NGold]\stat[NGold]{\rHom}{гомоклінічний вибух \quad (літ. 13.926)}\end{plaincard}
-      \begin{plaincard}[NSky]\stat[NSky]{\DTwo}{кореляційна розмірність \quad (літ. 2.05)}\end{plaincard}
-    \end{column}
-    \begin{column}{0.31\textwidth}
-      \begin{plaincard}[NSand]\stat[NSand]{\rAlo}{народження атрактора \quad (літ. 24.06)}\end{plaincard}
-      \begin{plaincard}[NOrange]\stat[NOrange]{$\predLam$}{$\lambda$ з горизонту прогнозу \quad ($\approx\lambda_1$)}\end{plaincard}
-    \end{column}
-  \end{columns}
-  \vspace{1.2em}
-  \begin{bigeq}[NTeal]
-    \small\texttt{lorenzlab}: Python + Numba \;·\; 19 чисельних експериментів \;·\; $\sim\!10^{10}$ кроків RK4 \;·\; 8 тестів \;·\; аналітика перевірена в SymPy
-  \end{bigeq}
+\begin{frame}[c]{Перевірка результатів}
+  \centering\small
+  \renewcommand{\arraystretch}{1.45}
+  \begin{tabular}{lcc}
+    \textcolor{NDim}{що рахувалося} & \textcolor{NDim}{у мене} & \textcolor{NDim}{у літературі}\\
+    найбільший показник Ляпунова & \gl{\lamOne} & 0.9056\\
+    розмірність Каплана--Йорке & \gl{\DKY} & 2.06\\
+    кореляційна розмірність & \gl{\DTwo} & 2.05\\
+    поява перших нерегулярних орбіт, $r$ & \gl{\rHom} & 13.926\\
+    народження атрактора, $r$ & \gl{\rAlo} & 24.06\\
+  \end{tabular}
+  \\[1.6em]
+  \footnotesize\dimtxt{Код власний (Python + Numba), формули перевірено в SymPy, коректність коду перевіряють 11 тестів.}
 \end{frame}
 
 % =====================================================================
 % 14. ВИСНОВКИ
 % =====================================================================
-\begin{frame}[c]{Три уроки метелика}{висновки}
-  \vspace{0.3em}
+\begin{frame}[c]{Висновки}
   \begin{columns}[T]
-    \begin{column}{0.31\textwidth}
-      {\fontsize{34}{34}\selectfont\bfseries\color{NOrange}1}\\[0.3em]
-      {\large\bfseries Простий $\neq$ передбачуваний}\\[0.4em]
-      \small Три рівняння з двома нелінійностями вже породжують хаос: $\lambda_1>0$.
+    \begin{column}{0.3\textwidth}
+      {\large\bfseries\color{NOrange} Просте буває непередбачуваним}\\[0.6em]
+      \small Вистачило трьох рівнянь.
     \end{column}
-    \begin{column}{0.31\textwidth}
-      {\fontsize{34}{34}\selectfont\bfseries\color{NGold}2}\\[0.3em]
-      {\large\bfseries Хаос має форму}\\[0.4em]
-      \small Траєкторії непередбачувані, але живуть на фракталі розмірності $\approx 2.06$ — і його статистика стабільна.
+    \begin{column}{0.3\textwidth}
+      {\large\bfseries\color{NGold} У хаосу є форма}\\[0.6em]
+      \small Де саме буде точка, невідомо. Але вона на «метелику», і середні величини стійкі.
     \end{column}
-    \begin{column}{0.31\textwidth}
-      {\fontsize{34}{34}\selectfont\bfseries\color{NTeal}3}\\[0.3em]
-      {\large\bfseries Прогноз можливий — ймовірнісний}\\[0.4em]
-      \small Горизонт $\propto\ln(1/\delta_0)$, тому ансамблі та асиміляція даних — єдиний чесний шлях.
+    \begin{column}{0.3\textwidth}
+      {\large\bfseries\color{NTeal} Прогнозувати все одно можна}\\[0.6em]
+      \small Недалеко, з імовірностями і постійно звіряючись із даними.
     \end{column}
   \end{columns}
-  \vspace{2.2em}
+  \vspace{2.6em}
   \centering
   \bigquote{Хаос — це коли теперішнє визначає майбутнє, але наближене теперішнє не визначає наближено майбутнього}{Едвард Лоренц}
-  \vfill
 \end{frame}
 
 % =====================================================================
@@ -394,12 +332,119 @@
 \setbeamertemplate{background canvas}{}
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
-    \fill[NTitle] (current page.south west) rectangle (current page.north east);
-    \node[opacity=0.55] at (current page.center) {\includegraphics[height=\paperheight]{title_bg.png}};
-    \fill[NTitle,opacity=0.7,rounded corners=6pt] ($(current page.center)+(-4.3,-1.2)$) rectangle ($(current page.center)+(4.3,1.2)$);
-    \node[text=white,font=\fontsize{32}{36}\selectfont\bfseries] at ($(current page.center)+(0,0.3)$) {Дякую за увагу!};
-    \node[text=NGold,font=\large] at ($(current page.center)+(0,-0.65)$) {Запитання?};
+    \fill[NNight] (current page.south west) rectangle (current page.north east);
+    \node[opacity=0.55,inner sep=0] at (current page.center)
+      {\includegraphics[width=\paperwidth,height=\paperheight]{pop_isobars_title.png}};
+    \node[font=\fontsize{30}{34}\selectfont\bfseries,text=NInk] at ($(current page.center)+(0,0.45)$) {Дякую за увагу!};
+    \node[inner sep=0] at ($(current page.center)+(0,-0.35)$) {\Nfront};
+    \node[text=NDim,font=\large] at ($(current page.center)+(0,-1.05)$) {Запитання?};
   \end{tikzpicture}
 \end{frame}}
+
+% =====================================================================
+% БОНУС: ЛОРЕНЦ ПОЗА ПОГОДОЮ (запасні слайди, experiments/applications.py)
+% =====================================================================
+\begin{frame}{Де ще зустрічаються ці рівняння}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{card}[NSky]{Фізика}
+        \small
+        \begin{itemize}
+          \item[] \gl{Лазер} — одномодовий лазер точно зводиться до рівнянь Лоренца (Хакен, 1975)
+          \item[] \gl{Динамо} — дисковий генератор хаотично міняє полярність, як поле Землі (Кноблох, 1981)
+          \item[] \gl{Термосифон} — рідина в нагрітому кільці хаотично змінює напрям течії
+          \item[] \gl{Водяне колесо} Малкуса (1972) — далі
+        \end{itemize}
+      \end{card}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{card}[NOrange]{Техніка й дані}
+        \small
+        \begin{itemize}
+          \item[] \gl{Електродвигуни} — безщітковий двигун може бути хаотичним «за Лоренцом» (Хематі, 1994)
+          \item[] \gl{Секретний зв'язок} на хаотичних схемах (Куомо–Оппенгейм, 1993)
+          \item[] \gl{Машинне навчання} — Лоренц-63 як еталонний тест для нейромереж
+          \item[] \gl{Відкриття законів з даних} — SINDy (2016)
+        \end{itemize}
+      \end{card}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  \centering\small\gl{Хаос — властивість рівнянь, а не атмосфери:} де з'являються ці рівняння, там з'являється метелик.
+\end{frame}
+
+\begin{frame}{Водяне колесо Малкуса}
+  \centering
+  \includegraphics[height=0.46\textheight]{pop_wheel.png}\\[0.2em]
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \small Вода ллється у верхні відра, всі протікають. Важкий бік тягне колесо вниз; розігнавшись, воно не встигає наповнювати відра, гальмує\ldots\ і \hl{розвертається}: \wheelRev\ реверсів за 270 од. часу.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{bigeq}
+        \footnotesize $\omega\to x,\quad \sum m_i\sin\varphi_i\to y,\quad \sum m_i\cos\varphi_i\to z$
+      \end{bigeq}
+      \footnotesize Перші фур'є-моди маси дають \gl{точно Лоренца з $\beta=1$}: всі моди витікають з однаковою швидкістю. У мене вийшло: $\lambda_1=\wheelLam$, хаос при $r>r_H=\wheelHopf$.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Хаотичний зв'язок}
+  \begin{columns}[c]
+    \begin{column}{0.6\textwidth}
+      \includegraphics[width=\linewidth]{pop_secret.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \small Передавач додає до хаотичного $x(t)$ слабке повідомлення (\secPct\% сигналу) — азбукою Морзе «ХАОС».
+      \begin{card}[NTeal]{Синхронізація}
+        \footnotesize Приймач — копія системи, яку «веде» сигнал $s=x+m$. Похибка $(e_y,e_z)$ згасає, бо $\dot V = -e_y^2-\beta e_z^2<0$. Тоді $m \approx s - x_r$.
+      \end{card}
+      \begin{card}[NOrange]{Але це не криптографія}
+        \footnotesize Перебір «ключів» $r'$ показав: повідомлення читається навіть при $r'=28+\secMaxOkDr$. Ключ угадують за кілька спроб — такі схеми зламано ще 1995 р. (Перес, Сердейра).
+      \end{card}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Прогноз нейромережею}
+  \centering
+  \includegraphics[height=0.44\textheight]{pop_reservoir.png}\\[0.1em]
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \small \gl{Мережа луни}: 800 випадково з'єднаних «нейронів» слухають ряд $x,y,z$; навчається лише вихідний шар (лінійна регресія). Далі мережа прогнозує сама, живлячись власним виходом.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \stat{\esnVT}{ляпуновських часів (середнє з 30 стартів: \esnVTmin–\esnVTmax)}
+      \vspace{0.2em}
+      \footnotesize Далі — розбіжність: \hl{метелика не обдуриш}. Але відображення $z_n\!\to z_{n+1}$ (праворуч) мережа відтворює: «погоду» забуває, «клімат» пам'ятає.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Відновлення рівнянь з даних}
+  \begin{columns}[c]
+    \begin{column}{0.47\textwidth}
+      \small Даємо лише виміряні $x(t),y(t),z(t)$ і словник кандидатів $1,x,y,z,x^2,xy,\ldots,z^2$. Розріджена регресія викидає зайве (Брантон та ін., 2016):
+      \begin{bigeq}
+        \vspace{-0.8em}
+        \begin{align*}
+          \dot x &= -\sinSigma\,x + \sinSigma\,y\\
+          \dot y &= \sinRho\,x - y - xz\\
+          \dot z &= xy - \sinBeta\,z
+        \end{align*}
+        \vspace{-1.3em}
+      \end{bigeq}
+      \footnotesize З шумом $\pm0.5$ і згладжуванням: $\sigma=\sinNSigma$, $r=\sinNRho$, $\beta=\sinNBeta$.
+      \begin{card}[NGold]{А тепер — колесо}
+        \footnotesize Дані водяного колеса $\to$ SINDy знаходить $\sigma=\sinWSigma$, $r=\sinWRho$, $\beta=\textbf{\sinWBeta}$ — комп'ютер сам «довів», що колесо — це Лоренц.
+      \end{card}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{pop_sindy.png}\\
+      \footnotesize\dimtxt{Шум убиває похідні; згладжування рятує до шуму $\sim 1$.}
+    \end{column}
+  \end{columns}
+\end{frame}
 
 \end{document}

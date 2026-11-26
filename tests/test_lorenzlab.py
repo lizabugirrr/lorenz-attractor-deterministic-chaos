@@ -64,3 +64,35 @@ def test_gram_schmidt_orthonormal():
     V, r = gram_schmidt(Q)
     assert np.allclose(V.T @ V, np.eye(3), atol=1e-12)
     assert np.isclose(np.prod(r), abs(np.linalg.det(Q)))
+
+
+# --- застосування (lorenzlab/applications.py) -------------------------------
+from lorenzlab.core import on_attractor  # noqa: E402
+from lorenzlab.applications import (chaotic_channel, waterwheel, wheel_params_for,  # noqa: E402
+                                    wheel_to_lorenz, poly_library, stlsq, true_coefficients,
+                                    derivative)
+
+
+def test_receiver_synchronizes_and_recovers_message():
+    dt = 0.001; n = 20000; t = np.arange(n) * dt
+    msg = 0.3 * np.sin(2 * np.pi * 10 * t)
+    u0 = np.concatenate([on_attractor(), [0.0, 0.0, 0.0]])
+    _, rec = chaotic_channel(u0, dt, msg, np.array([SIGMA, RHO, BETA]))
+    assert np.std((rec - msg)[t > 8]) < 0.05 * 0.3
+    _, rec0 = chaotic_channel(u0, dt, np.zeros(n), np.array([SIGMA, RHO, BETA]))
+    assert np.max(np.abs(rec0[t > 15])) < 1e-6      # без повідомлення — точна синхронізація
+
+
+def test_waterwheel_is_lorenz_with_beta_one():
+    """Моди маси колеса задовольняють Лоренца з beta=1: SINDy це підтверджує."""
+    p = wheel_params_for(N=24)
+    t, th, om, ms = waterwheel(p["N"], 60.0, 0.002, p["Q"], p["K"], p["nu"], p["I"], p["gR"], 0.1, 5)
+    L = wheel_to_lorenz(th, om, ms, p)[t > 20]
+    Xi = stlsq(poly_library(L[50:-50]), derivative(L, t[1] - t[0])[50:-50], 0.5)
+    assert np.allclose(Xi, true_coefficients(10.0, 28.0, 1.0), atol=1e-2)
+
+
+def test_sindy_recovers_lorenz():
+    X = integrate(on_attractor(), 0.002, 5000)
+    Xi = stlsq(poly_library(X[10:-10]), derivative(X, 0.002)[10:-10], 0.5)
+    assert np.allclose(Xi, true_coefficients(), atol=1e-3)

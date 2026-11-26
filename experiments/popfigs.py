@@ -1,5 +1,5 @@
 """
-Графіки для науково-популярної версії презентації: темна тема,
+Графіки для науково-популярної версії презентації: темна палітра карти,
 великі шрифти, мінімум підписів. Результат: figures/pop_*.png
 """
 import json
@@ -14,25 +14,31 @@ from lorenzlab.core import SIGMA, RHO, BETA, integrate, advance, fixed_points, o
 from lorenzlab.weather import ensemble_run, predictability_times, enkf_lorenz63  # noqa: E402
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.collections import LineCollection  # noqa: E402
+from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R = json.load(open(os.path.join(ROOT, "results", "results.json")))
 LAM1 = R["lyap"][0]
 
-INK = "#E8E6E3"
-DIM = "#8D99AE"
-GOLD = "#F4A261"
-ORANGE = "#E76F51"
-TEAL = "#2A9D8F"
-SAND = "#E9C46A"
-SKY = "#6FB3D9"
+INK = "#1F2A37"
+DIM = "#4F4B42"
+GOLD = "#B7791F"
+ORANGE = "#B83227"
+TEAL = "#2F7A5B"
+SAND = "#C8901F"
+SKY = "#1F5C99"
+
+
+# від холодного фронту до теплого
+FRONTS = LinearSegmentedColormap.from_list("fronts", [SKY, "#4B3F72", ORANGE])
 
 
 def setup():
     style.setup()
     plt.rcParams.update({
+        "savefig.bbox": "tight", "axes.linewidth": 1.2,
         "text.color": INK, "axes.labelcolor": INK, "xtick.color": DIM, "ytick.color": DIM,
-        "axes.edgecolor": "#3A4562", "axes.facecolor": "none", "figure.facecolor": "none",
+        "axes.edgecolor": "#9C937C", "axes.facecolor": "none", "figure.facecolor": "none",
         "savefig.transparent": True, "font.size": 15, "axes.labelsize": 16,
         "legend.fontsize": 13, "axes.titlesize": 15, "axes.titlecolor": INK,
         "savefig.dpi": 250,
@@ -46,10 +52,13 @@ def save(fig, name):
     print("  ->", os.path.relpath(p, ROOT))
 
 
+def thick(lw):
+    """Мінімальна читабельна товщина на проєкторі."""
+    return 0.35 + 1.35 * lw
+
+
 def glow_line(ax, x, y, color, lw=1.6, alpha=1.0, **kw):
-    for w, a in [(lw * 5, 0.06), (lw * 2.6, 0.12)]:
-        ax.plot(x, y, color=color, lw=w, alpha=a * alpha, solid_capstyle="round")
-    return ax.plot(x, y, color=color, lw=lw, alpha=alpha, **kw)
+    return ax.plot(x, y, color=color, lw=thick(lw), alpha=alpha, **kw)
 
 
 def gradient_line(ax, x, y, cmap, lw=0.6, alpha=0.9):
@@ -78,11 +87,11 @@ def fig_rounding():
     t = np.arange(len(A)) * dt
     tb = 10 + np.arange(len(B)) * dt
     fig, ax = plt.subplots(figsize=(11, 3.6))
-    glow_line(ax, t, A[:, 0], SKY, lw=1.4)
-    glow_line(ax, tb, B[:, 0], ORANGE, lw=1.4, ls=(0, (4, 2)))
-    ax.axvline(10, color=DIM, lw=0.8, ls=":")
+    glow_line(ax, t, A[:, 0], SKY, lw=2.24)
+    glow_line(ax, tb, B[:, 0], ORANGE, lw=2.24, ls=(0, (4, 2)))
+    ax.axvline(10, color=DIM, lw=1.43, ls=":")
     ax.text(10.3, 21, "перезапуск з даних,\nокруглених до 0.001", color=DIM, fontsize=12, va="top")
-    ax.axvspan(19, 35, color=ORANGE, alpha=0.06)
+    ax.axvspan(19, 35, color=ORANGE, alpha=0.1)
     ax.text(27, 21, "зовсім інша «погода»", color=ORANGE, fontsize=13, ha="center", va="top")
     ax.set_xlim(0, 35); ax.set_ylim(-24, 24)
     ax.set_xlabel("час"); ax.set_yticks([])
@@ -101,8 +110,8 @@ def fig_convection():
     u = -np.pi * X * np.sin(np.pi * a * Xg) * np.cos(np.pi * Zg)
     w = np.pi * a * X * np.cos(np.pi * a * Xg) * np.sin(np.pi * Zg)
     fig, ax = plt.subplots(figsize=(8, 3.2))
-    ax.contourf(Xg, Zg, T, 60, cmap="inferno", alpha=0.95)
-    ax.streamplot(xs, zs, u, w, color=(1, 1, 1, 0.75), density=0.9, linewidth=1.0, arrowsize=1.1)
+    ax.contourf(Xg, Zg, T, 60, cmap="RdBu_r", alpha=0.8)
+    ax.streamplot(xs, zs, u, w, color=INK, density=0.9, linewidth=1.0, arrowsize=1.1)
     ax.set_aspect("equal"); clean(ax)
     ax.text(xs[-1] / 2, -0.09, "гаряче дно", ha="center", va="top", color=GOLD, fontsize=13)
     ax.text(xs[-1] / 2, 1.04, "холодна кришка", ha="center", va="bottom", color=SKY, fontsize=13)
@@ -119,7 +128,7 @@ def fig_attractor():
     n = len(tr)
     for i in range(0, n - 1, 250):
         seg = tr[i:i + 251]
-        ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=plt.cm.magma(0.3 + 0.65 * i / n), lw=0.35, alpha=0.85)
+        ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=FRONTS(i / n), lw=0.82, alpha=0.85)
     for p in fixed_points()[1:]:
         ax.scatter(*p, color=SKY, s=40, depthshade=False)
     ax.view_init(elev=16, azim=-50)
@@ -137,8 +146,8 @@ def fig_blob():
     bg = integrate(a0, 0.005, 8000)
     fig, axs = plt.subplots(1, 4, figsize=(13, 3.3))
     for ax, k in zip(axs, [0, 8, 14, 32]):
-        ax.plot(bg[:, 0], bg[:, 2], color="#3A4562", lw=0.4)
-        ax.plot(E[:, k, 0], E[:, k, 2], ".", ms=1.4, color=GOLD, alpha=0.9)
+        ax.plot(bg[:, 0], bg[:, 2], color="#9C937C", lw=0.89)
+        ax.plot(E[:, k, 0], E[:, k, 2], ".", ms=2.4, color=GOLD, alpha=0.9)
         ax.set_title(f"t = {k * 0.5:g}", color=INK, fontsize=15)
         clean(ax)
     save(fig, "blob")
@@ -153,18 +162,18 @@ def fig_gallery():
         dt = 0.005
         if r == 24.5:
             b = integrate(on_attractor(rho=r), dt, 30000, SIGMA, r, BETA)
-            ax.plot(b[:, 0], b[:, 2], color=SKY, lw=0.25, alpha=0.6)
+            ax.plot(b[:, 0], b[:, 2], color=SKY, lw=0.69, alpha=0.6)
             a = integrate(fixed_points(SIGMA, r, BETA)[1] + 1.0, dt, 30000, SIGMA, r, BETA)
-            ax.plot(a[:, 0], a[:, 2], color=ORANGE, lw=1.2)
+            ax.plot(a[:, 0], a[:, 2], color=ORANGE, lw=1.97)
         elif r == 28:
             tr = integrate(on_attractor(), dt, 20000)
-            gradient_line(ax, tr[:, 0], tr[:, 2], plt.cm.magma, lw=0.4)
+            gradient_line(ax, tr[:, 0], tr[:, 2], FRONTS, lw=0.89)
         else:
             tr = integrate(np.array([0.1, 0.0, 0.0]), dt, 14000, SIGMA, r, BETA)
-            gradient_line(ax, tr[:, 0], tr[:, 2], plt.cm.cool, lw=0.9)
+            gradient_line(ax, tr[:, 0], tr[:, 2], FRONTS, lw=1.56)
         for p in fixed_points(SIGMA, r, BETA)[1:]:
             ax.plot(p[0], p[2], "o", color=SAND, ms=5)
-        ax.set_title(title, fontsize=14, color=INK)
+        ax.set_title(title, fontsize=21, color=INK)
         clean(ax)
     fig.tight_layout()
     save(fig, "gallery")
@@ -179,11 +188,11 @@ def fig_butterfly():
     t = np.arange(n + 1) * dt
     d = np.linalg.norm(A - B, axis=1)
     fig, axs = plt.subplots(2, 1, figsize=(10, 5.2), sharex=True, gridspec_kw=dict(height_ratios=[1, 1.1]))
-    glow_line(axs[0], t, A[:, 0], SKY, lw=1.1)
-    glow_line(axs[0], t, B[:, 0], ORANGE, lw=1.1, ls=(0, (3, 2)))
+    glow_line(axs[0], t, A[:, 0], SKY, lw=1.84)
+    glow_line(axs[0], t, B[:, 0], ORANGE, lw=1.84, ls=(0, (3, 2)))
     axs[0].set_yticks([]); axs[0].set_ylabel("x(t)")
-    axs[1].semilogy(t, d, color=GOLD, lw=1.0)
-    axs[1].semilogy(t, 1e-9 * np.exp(LAM1 * t), color=INK, lw=1.4, ls="--", alpha=0.8)
+    axs[1].semilogy(t, d, color=GOLD, lw=1.70)
+    axs[1].semilogy(t, 1e-9 * np.exp(LAM1 * t), color=INK, lw=2.24, ls="--", alpha=0.8)
     axs[1].text(9, 1e-4, r"$\delta_0\, e^{\lambda_1 t}$", color=INK, fontsize=18)
     axs[1].set_ylim(1e-10, 1e3); axs[1].set_ylabel("відстань")
     axs[1].set_xlabel("час")
@@ -203,14 +212,14 @@ def fig_horizon():
     fig, ax = plt.subplots(figsize=(7.2, 4.4))
     lo, hi = np.nanpercentile(T, 10, axis=0), np.nanpercentile(T, 90, axis=0)
     ax.fill_between(d0, lo, hi, color=TEAL, alpha=0.2, lw=0)
-    ax.semilogx(d0, np.log(1 / d0) / LAM1, color=INK, ls="--", lw=1.2, alpha=0.8)
+    ax.semilogx(d0, np.log(1 / d0) / LAM1, color=INK, ls="--", lw=1.97, alpha=0.8)
     ax.semilogx(d0, Tm, "o", color=GOLD, ms=7)
     ax.invert_xaxis()
     ax.set_xlabel("початкова похибка  →  точніше")
     ax.set_ylabel("скільки часу прогноз корисний")
     for i in (3, 9):
         ax.annotate("", xy=(d0[i], Tm[i]), xytext=(d0[i + 1], Tm[i + 1]),
-                    arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.6))
+                    arrowprops=dict(arrowstyle="->", color=ORANGE, lw=2.51))
     ax.text(d0[5], Tm[2] + 1, "×10 точніше\n= лише +2.5", color=ORANGE, fontsize=14)
     ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
     save(fig, "horizon")
@@ -227,14 +236,14 @@ def fig_ensemble():
     t = np.arange(E.shape[1]) * dt * 4
     fig, axs = plt.subplots(2, 1, figsize=(10, 5), sharex=True, gridspec_kw=dict(height_ratios=[2.2, 1]))
     for m in range(E.shape[0]):
-        axs[0].plot(t, E[m, :, 0], color=SKY, lw=0.5, alpha=0.45)
-    glow_line(axs[0], t, E[:, :, 0].mean(0), ORANGE, lw=1.8)
+        axs[0].plot(t, E[m, :, 0], color=SKY, lw=1.02, alpha=0.6)
+    glow_line(axs[0], t, E[:, :, 0].mean(0), ORANGE, lw=2.78)
     axs[0].text(0.3, 17, "50 прогнозів з майже однакових стартів", color=SKY, fontsize=13)
     axs[0].text(8.2, -3, "середнє", color=ORANGE, fontsize=13)
     axs[0].set_yticks([])
     p = (E[:, :, 0] > 0).mean(0)
     axs[1].fill_between(t, 0, p, color=TEAL, alpha=0.35, lw=0)
-    axs[1].plot(t, p, color=TEAL, lw=1.6)
+    axs[1].plot(t, p, color=TEAL, lw=2.51)
     axs[1].set_ylim(0, 1); axs[1].set_yticks([0, 0.5, 1])
     axs[1].set_ylabel("P(праве крило)", fontsize=13)
     axs[1].set_xlabel("час прогнозу")
@@ -249,19 +258,45 @@ def fig_enkf():
     t = res["t"]
     m = t <= 14
     fig, ax = plt.subplots(figsize=(10, 3.8))
-    ax.plot(t[m], res["free"][m, 0], color=DIM, lw=1.0, ls=":", label="модель без даних")
+    ax.plot(t[m], res["free"][m, 0], color=DIM, lw=1.70, ls=":", label="модель без даних")
     ax.plot(t[m], res["obs"][m, 0], "o", color=SAND, ms=3.2, alpha=0.8, label="зашумлені вимірювання")
-    glow_line(ax, t[m], res["truth"][m, 0], SKY, lw=1.6, label="реальність")
-    ax.plot(t[m], res["analysis"][m, 0], color=ORANGE, lw=1.4, ls=(0, (4, 2)), label="модель + дані (EnKF)")
+    glow_line(ax, t[m], res["truth"][m, 0], SKY, lw=2.51, label="реальність")
+    ax.plot(t[m], res["analysis"][m, 0], color=ORANGE, lw=2.24, ls=(0, (4, 2)), label="модель + дані (EnKF)")
     ax.set_yticks([]); ax.set_xlabel("час")
-    ax.legend(ncol=4, loc="upper center", bbox_to_anchor=(0.5, 1.18), frameon=False, fontsize=12)
+    ax.legend(ncol=4, loc="upper center", bbox_to_anchor=(0.5, 1.18), frameon=False, fontsize=15, handlelength=1.4, columnspacing=1.0)
     ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False); ax.spines["left"].set_visible(False)
     save(fig, "enkf")
 
 
+def fig_isobars():
+    """Тло слайдів: ізобари вигаданої синоптичної карти (В — високий тиск, Н — низький)."""
+    x, y = np.meshgrid(np.linspace(0, 16, 640), np.linspace(0, 9, 360))
+    centres = [(1.2, 7.8, 1.0, 2.6, "В"), (14.6, 8.2, -1.2, 2.4, "Н"), (13.8, 0.6, 0.9, 2.8, "В"),
+               (2.6, -0.4, -0.8, 2.5, "Н"), (8.0, 11.0, 0.5, 4.0, "")]
+    pressure = sum(a * np.exp(-((x - cx)**2 + (y - cy)**2) / w**2) for cx, cy, a, w, _ in centres)
+    pressure += 0.05 * np.sin(1.1 * x + 0.4 * y) * np.cos(0.9 * y - 0.3 * x)
+    for name, with_labels in [("isobars", False), ("isobars_title", True)]:
+        _draw_isobars(name, with_labels, x, y, pressure, centres)
+
+
+def _draw_isobars(name, with_labels, x, y, pressure, centres):
+    fig = plt.figure(figsize=(16, 9))
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.contour(x, y, pressure, levels=np.arange(-1.15, 1.2, 0.11), colors="#A99B76",
+               linewidths=1.1, linestyles="solid")
+    for cx, cy, a, _, label in centres:
+        if with_labels and label and 0 < cy < 9:
+            ax.text(cx, cy, label, color=ORANGE if a < 0 else SKY, fontsize=30,
+                    fontweight="bold", ha="center", va="center")
+    ax.set_xlim(0, 16); ax.set_ylim(0, 9); ax.set_axis_off()
+    with plt.rc_context({"savefig.bbox": None}):
+        fig.savefig(os.path.join(style.FIG_DIR, f"pop_{name}.png"), dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     setup()
-    for f in [fig_rounding, fig_convection, fig_attractor, fig_blob, fig_gallery, fig_butterfly,
+    for f in [fig_isobars, fig_rounding, fig_convection, fig_attractor, fig_blob, fig_gallery, fig_butterfly,
               fig_horizon, fig_ensemble, fig_enkf]:
         print(f.__name__)
         f()
