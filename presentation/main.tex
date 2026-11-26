@@ -22,7 +22,7 @@
 \newcommand{\norm}[1]{\lVert #1\rVert}
 
 \title{Ефект метелика}
-\author{Ім'я Прізвище}
+\author{Сучок Катерина, Шопська Анастасія, Бугір Єлизавета}
 \date{2026}
 
 \begin{document}
@@ -45,7 +45,7 @@
     \node[anchor=north west,text=NInk,font=\Large,align=left]
       at ($(current page.north west)+(0.85,-3.55)$) {Дивний атрактор Лоренца\\ та детермінований хаос};
     \node[anchor=south west,text=NInk,font=\normalsize,align=left]
-      at ($(current page.south west)+(0.85,0.7)$) {\textbf{Ім'я Прізвище}\\ \textcolor{NDim}{Динамічні системи, 2026}};
+      at ($(current page.south west)+(0.85,0.7)$) {\textbf{Сучок Катерина}\\ \textbf{Шопська Анастасія}\\ \textbf{Бугір Єлизавета}\\ \textcolor{NDim}{Динамічні системи, 2026}};
   \end{tikzpicture}
 \end{frame}}
 
@@ -63,7 +63,7 @@
     \begin{column}{0.6\textwidth}
       \small Щоб не рахувати все спочатку, Лоренц вписав числа з роздруківки і пішов по каву.
       Повернувся, а в машині вже \gl{зовсім інша погода}. Комп'ютер не зламався: так поводяться самі рівняння.
-      \\[0.2em]\dimtxt{\scriptsize На графіку моє відтворення цього досліду.}
+      \\[0.2em]\dimtxt{\scriptsize На графіку наше відтворення цього досліду.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -171,7 +171,7 @@
     \node[below=3pt,font=\footnotesize,text=NDim,align=center] at (7,0) {вали крутяться рівно};
   \end{tikzpicture}\\[0.3em]
   \includegraphics[width=\textwidth]{pop_gallery.png}\\[0.3em]
-  \footnotesize\dimtxt{Поріг $24.74=\tfrac{470}{19}$ виведено аналітично, а $13.93$ і $24.06$ я отримую чисельно.}
+  \footnotesize\dimtxt{Поріг $24.74=\tfrac{470}{19}$ виведено аналітично, а $13.93$ і $24.06$ ми отримали чисельно.}
 \end{frame}
 
 % =====================================================================
@@ -274,7 +274,7 @@
       \end{bigeq}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \footnotesize\centering Середня похибка в моєму досліді (фільтр EnKF):\\[0.5em]
+      \footnotesize\centering Середня похибка в нашому досліді (фільтр EnKF):\\[0.5em]
       \begin{columns}[T]
         \begin{column}{0.33\linewidth}\stat[NDim]{\enkfFree}{модель сама}\end{column}
         \begin{column}{0.33\linewidth}\stat[NSand]{2.0}{шум вимірів}\end{column}
@@ -291,7 +291,7 @@
   \centering\small
   \renewcommand{\arraystretch}{1.45}
   \begin{tabular}{lcc}
-    \textcolor{NDim}{що рахувалося} & \textcolor{NDim}{у мене} & \textcolor{NDim}{у літературі}\\
+    \textcolor{NDim}{що рахувалося} & \textcolor{NDim}{у нас} & \textcolor{NDim}{у літературі}\\
     найбільший показник Ляпунова & \gl{\lamOne} & 0.9056\\
     розмірність Каплана--Йорке & \gl{\DKY} & 2.06\\
     кореляційна розмірність & \gl{\DTwo} & 2.05\\
@@ -384,7 +384,7 @@
       \begin{bigeq}
         \footnotesize $\omega\to x,\quad \sum m_i\sin\varphi_i\to y,\quad \sum m_i\cos\varphi_i\to z$
       \end{bigeq}
-      \footnotesize Перші фур'є-моди маси дають \gl{точно Лоренца з $\beta=1$}: всі моди витікають з однаковою швидкістю. У мене вийшло: $\lambda_1=\wheelLam$, хаос при $r>r_H=\wheelHopf$.
+      \footnotesize Перші фур'є-моди маси дають \gl{точно Лоренца з $\beta=1$}: всі моди витікають з однаковою швидкістю. У нас вийшло: $\lambda_1=\wheelLam$, хаос при $r>r_H=\wheelHopf$.
     \end{column}
   \end{columns}
 \end{frame}
